@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MP3 download</title>
+</head>
+<body>
+  <button onclick="share()">Share MP3 file</button>
+
+  <script>
+  function share() {
+    const fileUrl = 'file:///C:/%EA%B0%9C%EC%9D%B8/%EA%B3%B5%EB%B6%80/JavaScript/test/11.mp3';
+    const shareData = {
+      title: 'Check out this audio file',
+      text: 'I found this great audio file on example.com',
+      url: fileUrl,
+    };
+    navigator.share(shareData);
+  }
+  </script>
+</body>
+</html>
