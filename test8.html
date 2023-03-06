@@ -15,7 +15,7 @@
     <button type="button">다운로드 테스트2</button> 
   </a> 
   <br>
-  <h2><button onclick="download()"> 다운로드 테스트 333</button></h2>
+  <h2><button onclick="download()">mp4->m4r 다운로드</button></h2>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js">
   </script>
@@ -23,7 +23,7 @@
   <script>
       function download() {
           axios({
-              url: '11.m4r',
+              url: '트리플에스-beam.mp4',
               method: 'GET',
               responseType: 'blob'
           })
@@ -32,7 +32,7 @@
                   .createObjectURL(new Blob([response.data]));
               const link = document.createElement('a');
               link.href = url;
-              link.setAttribute('download', '11.m4r');
+              link.setAttribute('download', '트리플에스-beam.m4r');
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
