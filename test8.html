@@ -15,16 +15,39 @@
     <button type="button">다운로드 테스트2</button> 
   </a> 
 
+  <h2><button onclick="download()"> 다운로드 테스트 333</button></h2>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js">
+  </script>
+  
   <script>
-  function share() {
-    const fileUrl = '11.mp3';
-    const shareData = {
-      title: 'Check out this audio file',
-      text: 'I found this great audio file on example.com',
-      url: fileUrl,
-    };
-    navigator.share(shareData);
-  }  
+      function download() {
+          axios({
+              url: '11.m4r',
+              method: 'GET',
+              responseType: 'blob'
+          })
+          .then((response) => {
+              const url = window.URL
+                  .createObjectURL(new Blob([response.data]));
+              const link = document.createElement('a');
+              link.href = url;
+              link.setAttribute('download', '11.m4r');
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+          })
+      }
+
+      function share() {
+          const fileUrl = '11.mp3';
+          const shareData = {
+              title: 'Check out this audio file',
+              text: 'I found this great audio file on example.com',
+              url: fileUrl,
+          };
+          navigator.share(shareData);
+      }  
   </script>
 </body>
 </html>
