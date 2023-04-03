@@ -65,4 +65,40 @@
         }
     }
 </script>
+    
+    function checkAppInstalled(packageName) {
+  var isInstalled = false;
+  try {
+    // Android only
+    if (navigator.userAgent.match(/Android/i)) {
+      // Check if the package name is installed
+      AndroidApp.checkInstalled(packageName);
+      isInstalled = true;
+    }
+  } catch (e) {
+    // Package not installed
+    console.log(packageName + " not installed.");
+  }
+  return isInstalled;
+}
+
+function launchApp(packageName) {
+  try {
+    // Android only
+    if (navigator.userAgent.match(/Android/i)) {
+      // Launch the app by package name
+      AndroidApp.launch(packageName);
+    }
+  } catch (e) {
+    console.log(packageName + " launch failed.");
+  }
+}
+
+// 사용 예시
+var packageName = "com.example.myapp";
+if (checkAppInstalled(packageName)) {
+  launchApp(packageName);
+} else {
+  alert("앱이 설치되어 있지 않습니다.");
+}
 </html> 
