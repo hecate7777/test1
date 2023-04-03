@@ -101,4 +101,27 @@ if (checkAppInstalled(packageName)) {
 } else {
   alert("앱이 설치되어 있지 않습니다.");
 }
+    
+    function checkAppInstalled(appPackageName) {
+    // 안드로이드 브라우저에서만 동작합니다.
+    if (/(android)/i.test(navigator.userAgent)) {
+        // 앱이 깔려있는지 확인하기 위해 브라우저에서 인텐트를 실행합니다.
+        var intentUrl = "intent://" + appPackageName + "/#Intent;scheme=" + appPackageName + ";package=" + appPackageName + ";end;";
+        window.location.href = intentUrl;
+
+        setTimeout(function () {
+            // 인텐트 실행 후, 브라우저에서 리다이렉트된 URL을 확인합니다.
+            if (document.hidden || document.webkitHidden) {
+                // 앱이 이미 깔려있는 경우, 브라우저가 백그라운드로 돌아갑니다.
+                alert('앱이 이미 깔려있습니다.');
+            } else {
+                // 앱이 깔려있지 않은 경우, 구글 플레이 스토어에서 인스톨 화면을 호출합니다.
+                var playStoreUrl = 'https://play.google.com/store/apps/details?id=' + appPackageName;
+                window.location.href = playStoreUrl;
+            }
+        }, 500);
+    } else {
+        alert('안드로이드 브라우저에서만 이용 가능합니다.');
+    }
+}
 </html> 
