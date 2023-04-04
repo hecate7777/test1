@@ -5,27 +5,9 @@
   <title>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 9</title>
 </head>
 <body>
-    <button onclick="playAudio()">Play</button>
-    <button onclick="pauseAudio()">Pause</button>
-    <audio id="myAudio2">
-      <source src="트리플에스-beam.mp4" type="audio/mp3">
-      Your browser does not support the audio element.
-    </audio>
-    <script>
-      var audio = document.getElementById("myAudio2");
-
-      function playAudio() {
-        audio.play();
-      }
-
-      function pauseAudio() {
-        audio.pause();
-      }
-    </script>
-  
-  <h1>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 1</h1><br><br><br>
+  <h1>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 2</h1><br><br><br>
   <audio id="myAudio" src="트리플에스-beam.mp4"></audio>
-  <button onclick="cutAndSave(30, 3)"><h2>mp4 화일을 변형<br>(30초 컷, 3초 페이드아웃)</h2></button>
+  <button onclick="cutAndFadeOutAudio(30, 3)"><h2>mp4 화일을 변형<br>(30초 컷, 3초 페이드아웃)</h2></button>
   <br><br><br>
   <button onclick="download()"><h2>mp4->m4r 다운로드</h2></button>
  
@@ -33,6 +15,7 @@
   </script>
 
   <script>
+/*
     function cutAndSave(cut_time, fadeout_time) {
       const audio = document.getElementById("audio");
       const ctx = new AudioContext();
@@ -56,40 +39,42 @@
         link.click();
       }, cut_time * 1000);
     }
+*/
     
-    function cutAndFadeOutAudio(audioFile) {
-  const audioContext = new AudioContext();
-  const audioElement = new Audio(audioFile);
-  const sourceNode = audioContext.createMediaElementSource(audioElement);
-  const gainNode = audioContext.createGain();
-  const fadeDuration = 3;
+    function cutAndFadeOutAudio(cut_time, fadeout_time) {
+      const audioContext = new AudioContext();
+      const audioFile = '트리플에스-beam-cut.mp4';
+      const audioElement = new Audio(audioFile);
+      const sourceNode = audioContext.createMediaElementSource(audioElement);
+      const gainNode = audioContext.createGain();
+      const fadeDuration = fadeout_time;
 
-  sourceNode.connect(gainNode);
-  gainNode.connect(audioContext.destination);
+      sourceNode.connect(gainNode);
+      gainNode.connect(audioContext.destination);
 
-  audioElement.addEventListener("canplaythrough", function() {
-    const startTime = audioContext.currentTime;
-    const endTime = startTime + 30;
+      audioElement.addEventListener("canplaythrough", function() {
+        const startTime = audioContext.currentTime;
+        const endTime = startTime + cut_time;
 
-    // Set the gain to 1.0 at the start time
-    gainNode.gain.setValueAtTime(1.0, startTime);
+        // Set the gain to 1.0 at the start time
+        gainNode.gain.setValueAtTime(1.0, startTime);
 
-    // Fade out over the specified duration
-    gainNode.gain.linearRampToValueAtTime(0.0, endTime - fadeDuration);
+        // Fade out over the specified duration
+        gainNode.gain.linearRampToValueAtTime(0.0, endTime - fadeDuration);
 
-    // Stop the audio playback after the fade out has completed
-    audioElement.addEventListener("ended", function() {
-      audioElement.pause();
-      audioElement.currentTime = 0;
-    });
-    setTimeout(function() {
-      audioElement.pause();
-    }, (endTime - startTime - fadeDuration) * 1000);
+        // Stop the audio playback after the fade out has completed
+        audioElement.addEventListener("ended", function() {
+          audioElement.pause();
+          audioElement.currentTime = 0;
+        });
+        setTimeout(function() {
+          audioElement.pause();
+        }, (endTime - startTime - fadeDuration) * 1000);
 
-    // Start the audio playback and wait for the fade out to complete
-    audioElement.play();
-  });
-}
+        // Start the audio playback and wait for the fade out to complete
+        audioElement.play();
+      });
+    }
     
     function cutAndSave_old(cut_time, fadeout_time) {
       const audio = document.getElementById('myAudio');
