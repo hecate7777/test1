@@ -43,7 +43,7 @@
     
     function cutAndFadeOutAudio(cut_time, fadeout_time) {
       const audioContext = new AudioContext();
-      const audioFile = '트리플에스-beam-cut.mp4';
+      const audioFile = '트리플에스-beam.mp4';
       const audioElement = new Audio(audioFile);
       const sourceNode = audioContext.createMediaElementSource(audioElement);
       const gainNode = audioContext.createGain();
