@@ -5,7 +5,7 @@
   <title>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 9</title>
 </head>
 <body>
-  <h1>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 3</h1><br><br><br>
+  <h1>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 4</h1><br><br><br>
   <audio id="myAudio" src="트리플에스-beam.mp4"></audio>
   <button onclick="cutAndFadeOutAudio(30, 3)"><h2>mp4 화일을 변형<br>(30초 컷, 3초 페이드아웃)</h2></button>
   <br><br><br>
@@ -69,11 +69,11 @@
         });
         setTimeout(function() {
           audioElement.pause();
-          const blob = new Blob([audioElement.buffered], { type: "audio/mp3" });
+          const blob = new Blob([audioElement.buffered], { type: "audio/mp4" });
           const url = URL.createObjectURL(blob);
           const link = document.createElement("a");
           link.href = url;
-          link.download = "트리플에스-beam-cut.mp4";
+          link.setAttribute('download', 'tripleS.m4r');
           link.click();
         }, (endTime - startTime - fadeDuration) * 1000);
 
