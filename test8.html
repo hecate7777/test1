@@ -23,7 +23,7 @@
   
   <button onclick="download()"><h2>mp4->m4r 다운로드</h2></button>
   <br><br><br>
-  <button onclick="downloadwithfadeout(30, 3)"><h2>mp4->m4r 다운로드<br>(30초 컷, 3초 페이드)</h2></button>
+  <button onclick="downloadwithfadeout(30, 3)"><h2>mp4->m4r 다운로드<br>(30초 컷, 3초 페이드아웃)</h2></button>
  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js">
   </script>
@@ -76,7 +76,7 @@
         const audio = new Audio(audioUrl);
 
         // 재생이 시작되면
-        audio.addEventListener('play', () => {
+//        audio.addEventListener('play', () => {
 alert("1")
           // 30초 후에 재생 중지
           setTimeout(() => {
@@ -98,7 +98,7 @@ alert("3")
             }, fadeOutInterval);
           }, (cut_time-fadeout_time)*1000); // 마지막 fadeout_time초 동안 페이드 아웃을 위해 (cut_time-fadeout_time)초에 재생 중지
 alert("4")
-        });
+//        });
 
         // 오디오 요소 로드
         audio.load();
