@@ -2,163 +2,85 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>m4r 다운로드 테스트</title>
+  <title>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트</title>
 </head>
 <body>
-  <!--
-  <button onclick="share()">Share MP3 file</button>
-  <br>
-  <h2><a href="11.m4r">다운로드m4r</a></h2>
-  <br>
-  <h2><a href="11.mp3">다운로드mp3</a></h2>
-  <br>
-  <a href="11.m4r" download="11.m4r">
-    <button type="button">다운로드 테스트2</button> 
-  </a> 
-  <br>
-  
-  -->
-  
-  <button onclick="download()"><h2>mp4->m4r 다운로드</h2></button>
+  <button onclick="cutwithfadeout(30, 3)"><h2>mp4 화일을 변형<br>(30초 컷, 3초 페이드아웃)</h2></button>
   <br><br><br>
-  <button onclick="downloadwithfadeout(30, 3)"><h2>mp4->m4r 다운로드<br>(30초 컷, 3초 페이드아웃)</h2></button>
+  <button onclick="download()"><h2>mp4->m4r 다운로드</h2></button>
  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js">
   </script>
   
   <script>
-      function download() {
-          axios({
-              url: '트리플에스-beam.mp4',
-              method: 'GET',
-              responseType: 'blob'
-          })
-          .then((response) => {
-              const url = window.URL
-                  .createObjectURL(new Blob([response.data]));
-              const link = document.createElement('a');
-              link.href = url;
-              link.setAttribute('download', 'tripleS.m4r');
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-          })
-      }
+    function cutwithfadeout(cut_time, fadeout_time) {
+      const fs = require('fs');
+      const { spawn } = require('child_process');
 
-      function downloadwithfadeout(cut_time, fadeout_time) {
-          cut_and_save(cut_time, fadeout_time)
-        
-  alert("5")
-        axios({
-              url: '트리플에스-beam.mp4',
-              method: 'GET',
-              responseType: 'blob'
-          })
-          .then((response) => {
-              const url = window.URL
-                  .createObjectURL(new Blob([response.data]));
-              const link = document.createElement('a');
-              link.href = url;
-              link.setAttribute('download', 'tripleS.m4r');
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-          })
-      }
+      // 음악 파일 경로
+      const filePath = '트리플에스-beam.mp4';
 
-      function cut_and_save(cut_time, fadeout_time) {
-        // 음악 파일 URL
-        const audioUrl = '트리플에스-beam.mp4';
+      // 자를 구간의 시작 시간
+      const startTime = '00:00:00';
 
-        // 오디오 요소 생성
-        const audio = new Audio(audioUrl);
+      // 자를 구간의 길이
+      const duration = cut_time;
 
-        // 재생이 시작되면
-//        audio.addEventListener('play', () => {
-alert("1")
-          // 30초 후에 재생 중지
-          setTimeout(() => {
-alert("2")
-            // 3초 동안 페이드 아웃
-            const fadeOutDuration = fadeout_time*1000; // fadeout_time
-            const fadeOutInterval = 10; // 10ms 간격으로 페이드 아웃
-            const volumeStep = audio.volume / (fadeOutDuration / fadeOutInterval);
-            let currentVolume = audio.volume;
-            const fadeOutTimer = setInterval(() => {
-              currentVolume -= volumeStep;
-              audio.volume = currentVolume;
-              // 음량이 0에 도달하면 재생 중지하고 페이드 아웃 타이머 종료
-              if (currentVolume <= 0) {
-alert("3")
-                audio.pause();
-                clearInterval(fadeOutTimer);
-              }
-            }, fadeOutInterval);
-          }, (cut_time-fadeout_time)*1000); // 마지막 fadeout_time초 동안 페이드 아웃을 위해 (cut_time-fadeout_time)초에 재생 중지
-alert("4")
-//        });
+      // 페이드 아웃에 사용할 시간
+      const fadeOutDuration = fadeout_time;
 
-        // 오디오 요소 로드
-        audio.load();
-      }
-    
-      function share() {
-          const fileUrl = '11.mp3';
-          const shareData = {
-              title: '다운로드 테스트',
-              text: '다운로드가 되는지 아닌지 테스트하는거',
-              url: fileUrl,
-          };
-          navigator.share(shareData);
-      }  
+      // 자르고 저장할 파일 이름
+      const newFilePath = '트리플에스-beam-cut.mp4';
+
+      // ffmpeg 명령어 생성
+      const ffmpegArgs = [
+        '-i',
+        filePath,
+        '-ss',
+        startTime,
+        '-t',
+        duration,
+        '-af',
+        `afade=t=out:st=${duration - fadeOutDuration}:d=${fadeOutDuration}`,
+        newFilePath,
+      ];
+
+      // ffmpeg 실행
+      const ffmpeg = spawn('ffmpeg', ffmpegArgs);
+
+      // 에러 처리
+      ffmpeg.on('error', (error) => {
+        console.error(`ffmpeg error: ${error}`);
+      });
+
+      // 종료 처리
+      ffmpeg.on('close', (code) => {
+        if (code === 0) {
+          console.log('음악 파일 자르기 성공');
+        } else {
+          console.error(`ffmpeg exited with code ${code}`);
+        }
+      });
+    }         
+
+    function download() {
+      axios({
+        url: '트리플에스-beam-cut.mp4',
+        method: 'GET',
+        responseType: 'blob'
+      })
+      .then((response) => {
+        const url = window.URL
+        .createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'tripleS.m4r');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+    }
   </script>
 </body>
 </html>
 
-const fs = require('fs');
-const { spawn } = require('child_process');
-
-// 음악 파일 경로
-const filePath = 'music.mp3';
-
-// 30초로 자를 구간의 시작 시간
-const startTime = '00:00:00';
-
-// 30초로 자를 구간의 길이
-const duration = 30;
-
-// 페이드 아웃에 사용할 시간
-const fadeOutDuration = 3;
-
-// 자르고 저장할 파일 이름
-const newFilePath = 'music_30s_fadeout.mp3';
-
-// ffmpeg 명령어 생성
-const ffmpegArgs = [
-  '-i',
-  filePath,
-  '-ss',
-  startTime,
-  '-t',
-  duration,
-  '-af',
-  `afade=t=out:st=${duration - fadeOutDuration}:d=${fadeOutDuration}`,
-  newFilePath,
-];
-
-// ffmpeg 실행
-const ffmpeg = spawn('ffmpeg', ffmpegArgs);
-
-// 에러 처리
-ffmpeg.on('error', (error) => {
-  console.error(`ffmpeg error: ${error}`);
-});
-
-// 종료 처리
-ffmpeg.on('close', (code) => {
-  if (code === 0) {
-    console.log('음악 파일 자르기 성공');
-  } else {
-    console.error(`ffmpeg exited with code ${code}`);
-  }
-});
