@@ -48,6 +48,7 @@
       }
 
       function downloadwithfadeout(cut_time, fadeout_time) {
+          alert(cut_time)
           cut_and_save(cut_time, fadeout_time)
         
           axios({
@@ -68,6 +69,7 @@
       }
 
       function cut_and_save(cut_time, fadeout_time) {
+        alert(fadeout_time)
         // 음악 파일 URL
         const audioUrl = '트리플에스-beam.mp4';
 
