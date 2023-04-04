@@ -13,7 +13,7 @@
  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js">
   </script>
-<!--  
+
   <script>
     function cutAndSave(cut_time, fadeout_time) {
       const audio = document.getElementById('myAudio');
@@ -57,18 +57,18 @@ alert(newUrl)
           document.body.appendChild(newAudio);
         }
       });
-
-      function canvasToBlob(canvas) {
-        return new Promise((resolve, reject) => {
-          canvas.toBlob(blob => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject();
-            }
-          }, 'audio/mp4', 1);
-        });
-      }
+    }
+    
+    function canvasToBlob(canvas) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(blob => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject();
+          }
+        }, 'audio/mp4', 1);
+      });
     }
     
     function download() {
@@ -89,7 +89,6 @@ alert(newUrl)
       })
     }
   </script>
--->
 </body>
 </html>
 
