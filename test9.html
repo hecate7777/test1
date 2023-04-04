@@ -57,6 +57,40 @@
       }, cut_time * 1000);
     }
     
+    function cutAndFadeOutAudio(audioFile) {
+  const audioContext = new AudioContext();
+  const audioElement = new Audio(audioFile);
+  const sourceNode = audioContext.createMediaElementSource(audioElement);
+  const gainNode = audioContext.createGain();
+  const fadeDuration = 3;
+
+  sourceNode.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  audioElement.addEventListener("canplaythrough", function() {
+    const startTime = audioContext.currentTime;
+    const endTime = startTime + 30;
+
+    // Set the gain to 1.0 at the start time
+    gainNode.gain.setValueAtTime(1.0, startTime);
+
+    // Fade out over the specified duration
+    gainNode.gain.linearRampToValueAtTime(0.0, endTime - fadeDuration);
+
+    // Stop the audio playback after the fade out has completed
+    audioElement.addEventListener("ended", function() {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    });
+    setTimeout(function() {
+      audioElement.pause();
+    }, (endTime - startTime - fadeDuration) * 1000);
+
+    // Start the audio playback and wait for the fade out to complete
+    audioElement.play();
+  });
+}
+    
     function cutAndSave_old(cut_time, fadeout_time) {
       const audio = document.getElementById('myAudio');
       const canvas = document.createElement('canvas');
