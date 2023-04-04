@@ -18,10 +18,41 @@
   </a> 
   <br>
   
+
+// 음악 파일 URL
+const audioUrl = 'your-audio-file-url.mp3';
+
+// 오디오 요소 생성
+const audio = new Audio(audioUrl);
+
+// 재생이 시작되면
+audio.addEventListener('play', () => {
+  // 30초 후에 재생 중지
+  setTimeout(() => {
+    // 3초 동안 페이드 아웃
+    const fadeOutDuration = 3000; // 3초
+    const fadeOutInterval = 10; // 10ms 간격으로 페이드 아웃
+    const volumeStep = audio.volume / (fadeOutDuration / fadeOutInterval);
+    let currentVolume = audio.volume;
+    const fadeOutTimer = setInterval(() => {
+      currentVolume -= volumeStep;
+      audio.volume = currentVolume;
+      // 음량이 0에 도달하면 재생 중지하고 페이드 아웃 타이머 종료
+      if (currentVolume <= 0) {
+        audio.pause();
+        clearInterval(fadeOutTimer);
+      }
+    }, fadeOutInterval);
+  }, 27000); // 마지막 3초 동안 페이드 아웃을 위해 27초에 재생 중지
+});
+
+// 오디오 요소 로드
+audio.load();
   -->
   
   <button onclick="download()"><h2>mp4->m4r 다운로드</h2></button>
-  
+  <button onclick="download()"><h2>mp4->m4r 다운로드(30초 페이드아웃)</h2></button>
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js">
   </script>
   
@@ -56,3 +87,4 @@
   </script>
 </body>
 </html>
+
