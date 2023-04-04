@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>1.그릴 이미지</p>
+
+<img id="flower" width="480" height="280"
+src="flower.jpg">
+
+<p>2.캔버스 이미지</p>
+
+<canvas id="myCanvas" width="500" height="340"
+style="border:1px solid blue">
+</canvas>
+
+<script>
+window.onload = function() {
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    var img = document.getElementById("flower");
+    ctx.drawImage(img, 10, 10);
+};
+</script>
+
+</body>
+</html>
