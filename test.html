@@ -6,11 +6,11 @@
 </head>
 <body>
   <h3>원하는 음악을 선택하세요.</h3><br><br>
-  <h4><input type = "radio" name="bell" value="bts butter" checked>bts butter</h4><br>
-  <h4><input type = "radio" name="bell" value="He Makes Me Laugh">He Makes Me Laugh</h4><br>
-  <h4><input type = "radio" name="bell" value="Here I am">Here I am</h4><br>
-  <h4><input type = "radio" name="bell" value="밝게 빛나는 별이 되어 비춰줄게">밝게 빛나는 별이 되어 비춰줄게</h4><br>
-  <h4><input type = "radio" name="bell" value="트리플에스">트리플에스</h4><br>
+  <h4><input type = "radio" name="bell" value="bts butter">bts butter</h4>
+  <h4><input type = "radio" name="bell" value="He Makes Me Laugh">He Makes Me Laugh</h4>
+  <h4><input type = "radio" name="bell" value="Here I am">Here I am</h4>
+  <h4><input type = "radio" name="bell" value="밝게 빛나는 별이 되어 비춰줄게">밝게 빛나는 별이 되어 비춰줄게</h4>
+  <h4><input type = "radio" name="bell" value="트리플에스">트리플에스</h4>
   <hr>
   <h3 id="bellselect"></h3>
   <hr>
@@ -33,7 +33,7 @@
         radio.addEventListener('change', (event) => {
           const current = event.currentTarget
           if (current.checked) {
-            bellselect.textContent = `선택한 곡은 ${current.value} 입니다.`
+            bellselect.textContent = `선택한 곡은 "${current.value}" 입니다.`
           }
         })
       })
