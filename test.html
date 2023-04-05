@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>아이폰 벨소리 테스트</title>
+</head>
+<body>
+  <h1>원하는 음악을 선택하세요.</h1><br><br>
+  <input type = "radio" name="bell" value="1" checked>bts butter<br>
+  <input type = "radio" name="bell" value="2">He Makes Me Laugh<br>
+  <input type = "radio" name="bell" value="3">Here I am<br>
+  <input type = "radio" name="bell" value="4">밝게 빛나는 별이 되어 비춰줄게<br>
+  <input type = "radio" name="bell" value="5">트리플에스<br>
+  <hr>  
+  <h1>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 4</h1><br><br><br>
+  <audio id="myAudio" src="트리플에스-beam.mp4"></audio>
+  <button onclick="cutAndFadeOutAudio(30, 3)"><h2>mp4 화일을 변형<br>(30초 컷, 3초 페이드아웃)</h2></button>
+  <br><br><br>
+  <button onclick="download()"><h2>mp4->m4r 다운로드</h2></button>
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js">
+  </script>
+
+  <script>
+/*
+    function cutAndSave(cut_time, fadeout_time) {
+      const audio = document.getElementById("audio");
+      const ctx = new AudioContext();
+      const source = ctx.createMediaElementSource(audio);
+      const gainNode = ctx.createGain();
+      source.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      audio.play();
+  
+      setTimeout(() => {
+        gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 3);
+      }, (cut_time-fadeout_time) * 1000);
+  
+      setTimeout(() => {
+        audio.pause();
+        const blob = new Blob([audio.buffered], { type: "audio/mp3" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "cut-music.mp3";
+        link.click();
+      }, cut_time * 1000);
+    }
+*/
+    
+    function cutAndFadeOutAudio(cut_time, fadeout_time) {
+      const audioContext = new AudioContext();
+      const audioFile = '트리플에스-beam.mp4';
+      const audioElement = new Audio(audioFile);
+      const sourceNode = audioContext.createMediaElementSource(audioElement);
+      const gainNode = audioContext.createGain();
+      const fadeDuration = fadeout_time;
+
+      sourceNode.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      audioElement.addEventListener("canplaythrough", function() {
+        const startTime = audioContext.currentTime;
+        const endTime = startTime + cut_time;
+
+        // Set the gain to 1.0 at the start time
+        gainNode.gain.setValueAtTime(1.0, startTime);
+
+        // Fade out over the specified duration
+        gainNode.gain.linearRampToValueAtTime(0.0, endTime - fadeDuration);
+
+        // Stop the audio playback after the fade out has completed
+        audioElement.addEventListener("ended", function() {
+          audioElement.pause();
+          audioElement.currentTime = 0;
+        });
+        setTimeout(function() {
+          audioElement.pause();
+          const blob = new Blob([audioElement.buffered], { type: "audio/mp4" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute('download', 'tripleS.m4r');
+          link.click();
+        }, (endTime - startTime - fadeDuration) * 1000);
+
+        // Start the audio playback and wait for the fade out to complete
+        audioElement.play();
+      });
+    }
+    
+    function cutAndSave_old(cut_time, fadeout_time) {
+      const audio = document.getElementById('myAudio');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      const startTime = audio.currentTime;
+      const endTime = startTime + cut_time;
+
+      audio.currentTime = startTime;
+      audio.play();
+
+      audio.addEventListener('timeupdate', function () {
+        if (audio.currentTime >= endTime) {
+          audio.pause();
+          canvas.width = audio.width;
+          canvas.height = audio.height;
+          ctx.drawImage(audio, 0, 0, audio.width, audio.height);
+
+alert("6")
+          const fadeOutStart = audio.duration - fadeout_time;
+          const fadeOutEnd = audio.duration;
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+alert("7")
+          for (let i = 0; i < imageData.data.length; i += 4) {
+            const alpha = (audio.currentTime > fadeOutStart)
+              ? 1 - ((audio.currentTime - fadeOutStart) / (fadeOutEnd - fadeOutStart))
+              : 1;
+            imageData.data[i + 3] = Math.floor(alpha * 255);
+          }
+
+          ctx.putImageData(imageData, 0, 0);
+
+          const newAudio = new Audio();
+          const newBlob = canvasToBlob(canvas);
+          const newUrl = URL.createObjectURL(newBlob);
+
+alert(newUrl)
+        
+          newAudio.src = newUrl;
+          newAudio.controls = true;
+          document.body.appendChild(newAudio);
+        }
+      });
+    }
+    
+    function canvasToBlob(canvas) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(blob => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject();
+          }
+        }, 'audio/mp4', 1);
+      });
+    }
+    
+    function download() {
+      axios({
+        url: '트리플에스-beam-cut.mp4',
+        method: 'GET',
+        responseType: 'blob'
+      })
+      .then((response) => {
+        const url = window.URL
+        .createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'tripleS.m4r');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+    }
+  </script>
+</body>
+</html>
+
