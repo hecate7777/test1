@@ -5,7 +5,7 @@
   <title>아이폰 벨소리 테스트</title>
 </head>
 <body>
-  <h1>mp4 화일 30초 컷 & 3초 페이드아웃 다운로드 2</h1><hr>
+  <h1>mp4 화일 30초 컷 & 3초 페이드아웃 다운로드 1</h1><hr>
   
   <h3>원하는 음악을 선택하세요.</h3>
   <h4><input type = "radio" name="bell" value="bts butter">bts butter</h4>
@@ -69,6 +69,67 @@
 */
     
     function cutAndFadeOutAudio(cut_time, fadeout_time) {
+      // 필요한 변수 정의
+      const audioCtx = new AudioContext();
+      const fadeTime = fadeout_time; // 페이드 아웃 시간 (초)
+      const startTime = 0; // 자를 오디오의 시작 시간 (초)
+      const endTime = cut_time; // 자를 오디오의 종료 시간 (초)
+      const myaudio = document.querySelector('#myAudio')
+      const audioFile = myaudio.src;
+
+      // 오디오 파일 로드
+      const audioRequest = new XMLHttpRequest();
+      audioRequest.open('GET', audioFile, true);
+      audioRequest.responseType = 'arraybuffer';
+      audioRequest.onload = () => {
+        // 로드 완료 후 버퍼 생성
+        audioCtx.decodeAudioData(audioRequest.response, (buffer) => {
+          // 오디오 버퍼를 새로운 버퍼로 자르기
+          const source = audioCtx.createBufferSource();
+          const newBuffer = audioCtx.createBuffer(buffer.numberOfChannels, (endTime - startTime) * buffer.sampleRate, buffer.sampleRate);
+          for (let i = 0; i < buffer.numberOfChannels; i++) {
+            const channelData = buffer.getChannelData(i).subarray(startTime * buffer.sampleRate, endTime * buffer.sampleRate);
+            newBuffer.copyToChannel(channelData, i);
+          }
+          source.buffer = newBuffer;
+
+          // 페이드 아웃 처리
+          const gainNode = audioCtx.createGain();
+          source.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          const fadeOutTime = source.buffer.duration - fadeTime;
+          const fadeOutDuration = fadeTime * source.buffer.sampleRate;
+          const currentGain = gainNode.gain.value;
+          const fadeOut = (currentTime) => {
+            const timeLeft = fadeOutTime - currentTime;
+            if (timeLeft < fadeTime) {
+              gainNode.gain.setValueAtTime(currentGain * timeLeft / fadeTime, currentTime);
+            }
+            if (currentTime + fadeOutDuration < audioCtx.currentTime) {
+              source.stop();
+            } else {
+              requestAnimationFrame(fadeOut);
+            }
+          };
+          source.start(0);
+          requestAnimationFrame(fadeOut);
+
+          // 새로운 오디오 파일 다운로드
+          const newAudioFile =audioFile; // 저장할 새로운 오디오 파일 경로
+          const audioBlob = new Blob([newBuffer], { type: 'audio/mp3' });
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const downloadLink = document.createElement('a');
+          downloadLink.href = audioUrl;
+          downloadLink.download = newAudioFile;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        });
+      };
+      audioRequest.send();
+    }
+
+    function cutAndFadeOutAudio2(cut_time, fadeout_time) {
       const audioContext = new AudioContext();
       const myaudio = document.querySelector('#myAudio')
       const audioFile = myaudio.src;
@@ -194,4 +255,5 @@ alert(newUrl)
   </script>
 </body>
 </html>
+
 
