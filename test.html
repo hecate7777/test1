@@ -8,7 +8,7 @@
   <h1>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 4</h1><hr>
   
   <h3>원하는 음악을 선택하세요.</h3>
-  <h4><input type = "radio" name="bell" value="bts butter">bts butter</h4>
+  <h4><input type = "radio" name="bell" value="bts butter" checked>bts butter</h4>
   <h4><input type = "radio" name="bell" value="He Makes Me Laugh">He Makes Me Laugh</h4>
   <h4><input type = "radio" name="bell" value="Here I am">Here I am</h4>
   <h4><input type = "radio" name="bell" value="밝게 빛나는 별이 되어 비춰줄게">밝게 빛나는 별이 되어 비춰줄게</h4>
@@ -16,7 +16,7 @@
   <h3 id="bellselect"></h3>
   <hr>
   
-  <audio id="myAudio" src="트리플에스-beam.mp4"></audio>
+  <audio id="myAudio" src="bts butter.mp4"></audio>
   <button onclick="cutAndFadeOutAudio(30, 3)"><h2>mp4 화일을 변형<br>(30초 컷, 3초 페이드아웃)</h2></button>
   <br><br><br>
   <button onclick="download()"><h2>mp4->m4r 다운로드</h2></button>
@@ -27,13 +27,18 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const bellselect = document.querySelector('#bellselect')
+      const myaudio = document.querySelector('#myAudio')
       const radios = document.querySelectorAll('[name=bell]')
+      
+      bellselect.textContent = `선택한 곡은 "${current.value}" 입니다.`
       
       radios.forEach((radio) => {
         radio.addEventListener('change', (event) => {
           const current = event.currentTarget
           if (current.checked) {
             bellselect.textContent = `선택한 곡은 "${current.value}" 입니다.`
+            myaudio.src = current.value & '.mp4'
+            alert(myaudio.src')
           }
         })
       })
