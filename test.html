@@ -5,7 +5,7 @@
   <title>아이폰 벨소리 테스트</title>
 </head>
 <body>
-  <h1>mp4 화일 30초 컷 & 3초 페이드아웃 다운로드 1</h1><hr>
+  <h1>mp4 화일 30초 컷 & 3초 페이드아웃 다운로드 2</h1><hr>
   
   <h3>원하는 음악을 선택하세요.</h3>
   <h4><input type = "radio" name="bell" value="bts butter">bts butter</h4>
@@ -106,11 +106,13 @@
           link.href = url;
      alert(document.querySelector('input[name="bell"]:checked').value+'.mp4')
           link.setAttribute('download', document.querySelector('input[name="bell"]:checked').value+'.mp4');
+          document.body.appendChild(link);
           link.click();
+          document.body.removeChild(link);
         }, (endTime - startTime - fadeDuration) * 1000);
 
         // Start the audio playback and wait for the fade out to complete
-        //audioElement.play();
+        audioElement.play();
       });
     }
     
