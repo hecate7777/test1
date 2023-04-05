@@ -5,7 +5,7 @@
   <title>아이폰 벨소리 테스트</title>
 </head>
 <body>
-  <h1>mp4 화일 30초로 컷, 3초 페이드아웃 m4r로 다운로드 2</h1><hr>
+  <h1>mp4 화일 30초로 컷, 3초 페이드아웃 m4r로 다운로드 1</h1><hr>
   
   <h3>원하는 음악을 선택하세요.</h3>
   <h4><input type = "radio" name="bell" value="bts butter">bts butter</h4>
@@ -35,8 +35,7 @@
           const current = event.currentTarget
           if (current.checked) {
             bellselect.textContent = `선택한 곡은 "${current.value}" 입니다.`
-           // myaudio.src = current.value & '.mp4'
-            alert(current.value)
+            myaudio.src = current.value + '.mp4'
             alert(myaudio.src)
           }
         })
