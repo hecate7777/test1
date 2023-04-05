@@ -5,13 +5,16 @@
   <title>아이폰 벨소리 테스트</title>
 </head>
 <body>
-  <h1>원하는 음악을 선택하세요.</h1><br><br>
-  <input type = "radio" name="bell" value="1" checked>bts butter<br>
-  <input type = "radio" name="bell" value="2">He Makes Me Laugh<br>
-  <input type = "radio" name="bell" value="3">Here I am<br>
-  <input type = "radio" name="bell" value="4">밝게 빛나는 별이 되어 비춰줄게<br>
-  <input type = "radio" name="bell" value="5">트리플에스<br>
-  <hr>  
+  <h3>원하는 음악을 선택하세요.</h3><br><br>
+  <input type = "radio" name="bell" value="bts butter" checked><h4>bts butter</h4><br>
+  <input type = "radio" name="bell" value="He Makes Me Laugh"><h4>He Makes Me Laugh</h4><br>
+  <input type = "radio" name="bell" value="Here I am"><h4>Here I am</h4><br>
+  <input type = "radio" name="bell" value="밝게 빛나는 별이 되어 비춰줄게"><h4>밝게 빛나는 별이 되어 비춰줄게</h4><br>
+  <input type = "radio" name="bell" value="트리플에스"><h4>트리플에스</h4><br>
+  <hr>
+  <h3 id="bellselect"></h3>
+  <hr>
+  
   <h1>mp4 화일을 30초로 컷하고 마지막 3초는 페이드아웃하여 m4r로 다운로드하는 테스트 4</h1><br><br><br>
   <audio id="myAudio" src="트리플에스-beam.mp4"></audio>
   <button onclick="cutAndFadeOutAudio(30, 3)"><h2>mp4 화일을 변형<br>(30초 컷, 3초 페이드아웃)</h2></button>
@@ -22,6 +25,20 @@
   </script>
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bellselect = document.querySelector('#bellselect')
+      const radios = document.querySelectorAll('[name=bell]')
+      
+      radios.forEach(radio) => {
+        radio.addEventListener('change', (event) => {
+          const current = event.currentTarget
+          if (current.checked) {
+            bellselect.textContent = `선택한 곡은 ${current.value} 입니다.`
+          }
+        })
+      })
+    })
+    
 /*
     function cutAndSave(cut_time, fadeout_time) {
       const audio = document.getElementById("audio");
