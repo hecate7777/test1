@@ -5,7 +5,7 @@
   <title>아이폰 벨소리 테스트</title>
 </head>
 <body>
-  <h1>mp4 화일 30초로 컷, 3초 페이드아웃 m4r로 다운로드 2</h1><hr>
+  <h1>mp4 화일 30초 컷 & 3초 페이드아웃 다운로드 1</h1><hr>
   
   <h3>원하는 음악을 선택하세요.</h3>
   <h4><input type = "radio" name="bell" value="bts butter">bts butter</h4>
@@ -76,6 +76,7 @@
       const sourceNode = audioContext.createMediaElementSource(audioElement);
       const gainNode = audioContext.createGain();
       const fadeDuration = fadeout_time;
+      const bellselect = document.querySelector('#bellselect')
 
       sourceNode.connect(gainNode);
       gainNode.connect(audioContext.destination);
@@ -97,16 +98,16 @@
         });
         setTimeout(function() {
           audioElement.pause();
-          const blob = new Blob([audioElement.buffered], { type: "audio/mp4" });
+          const blob = new Blob([audioElement.buffered], { type: "audio/mp3" });
           const url = URL.createObjectURL(blob);
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute('download', 'tripleS.m4r');
+          link.setAttribute('download', bellselect.checked.value+'mp4');
           link.click();
         }, (endTime - startTime - fadeDuration) * 1000);
 
         // Start the audio playback and wait for the fade out to complete
-        audioElement.play();
+        //audioElement.play();
       });
     }
     
